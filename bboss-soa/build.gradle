@@ -4,15 +4,13 @@ sourceSets {
             srcDirs 'src'
         }
         resources {
-           
+
         }
     }
     test {
-		 
-		resources {
-			
-			srcDir 'resources'
-		}
-	}
+        resources {
+            srcDir 'resources'
+        }
+    }
 }
 

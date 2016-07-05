@@ -2,10 +2,12 @@ buildscript {
     repositories {
         mavenLocal()
         maven {
-            url 'http://bdp.sany.com.cn/nexus/content/groups/public/'
+            url "http://bdp.sany.com.cn/nexus/content/groups/public/"
+        }
+        maven {
+            url "http://122.225.105.101:8081/nexus/content/groups/public/"
         }
     }
-
     dependencies {
         classpath 'org.akhikhl.gretty:gretty:+'
     }
@@ -27,21 +29,17 @@ configure(allprojects) { project ->
             javaRuntimeName = "../../org.eclipse.jdt.launching.JRE_CONTAINER"
         }
     }
-
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
     }
-
     tasks.withType(Javadoc) {
         sourceCompatibility = SOURCE_COMPILER_LEVEL
         targetCompatibility = TARGET_COMPILER_LEVEL
         options.encoding = 'UTF-8'
     }
-
     dependencies {
         testCompile 'junit:junit:4.12'
     }
-
     if (project.getProperty('skipTest').equals("true")) {
         compileTestJava.enabled = false
         processTestResources.enabled = false
@@ -55,7 +53,6 @@ configure(subprojects - [project(":bboss-util"), project(":bboss-taglib"), proje
         classifier = "sources"
         from sourceSets.main.allJava
     }
-
     task javaDocJar(type: Jar, dependsOn: javadoc) {
         classifier = "javadoc"
         from javadoc.destinationDir
@@ -63,7 +60,15 @@ configure(subprojects - [project(":bboss-util"), project(":bboss-taglib"), proje
     artifacts {
         archives sourcesJar, javaDocJar
     }
-
+    repositories {
+        mavenLocal()
+        maven {
+            url "http://bdp.sany.com.cn/nexus/content/groups/public/"
+        }
+        maven {
+            url "http://122.225.105.101:8081/nexus/content/groups/public/"
+        }
+    }
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -73,15 +78,18 @@ configure(subprojects - [project(":bboss-util"), project(":bboss-taglib"), proje
             }
         }
         repositories {
-            credentials {
-                username 'admin'
-                password 'admin123'
+            maven {
+                url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                credentials {
+                    username ""
+                    password ""
+                }
             }
-            if (project.version.endsWith('-SNAPSHOT')) {
-                url "http://bdp.sany.com.cn/nexus/content/repositories/snapshots/"
-            } else {
-                url "http://bdp.sany.com.cn/nexus/content/repositories/releases/"
-            }
+            /**
+             maven {url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+             credentials {username ""
+             password ""}}*/
+            mavenLocal()
         }
     }
 }

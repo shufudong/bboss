@@ -113,6 +113,7 @@ publishing {
     }
     repositories {
         maven {
+            /**
             credentials {
                 username 'admin'
                 password 'admin123'
@@ -121,6 +122,16 @@ publishing {
                 url "http://bdp.sany.com.cn/nexus/content/repositories/snapshots/"
             } else {
                 url "http://bdp.sany.com.cn/nexus/content/repositories/releases/"
+            }
+            */
+            credentials {
+                username 'admin'
+                password 'hwhmd369'
+            }
+            if (project.version.endsWith('-SNAPSHOT')) {
+                url "http://122.225.105.101:8081/nexus/content/repositories/snapshots/"
+            } else {
+                url "http://122.225.105.101:8081/nexus/content/repositories/releases/"
             }
         }
     }
