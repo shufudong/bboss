@@ -33,8 +33,10 @@ bboss-taglib/.classpath
 bboss-taglib/.project
 .idea
 .gradle
+*.iml
 /.classpath
 /.project
 /.settings/
 
 *.class
+build
