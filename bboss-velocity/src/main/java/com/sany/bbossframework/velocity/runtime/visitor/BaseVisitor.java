@@ -1,0 +1,464 @@
+package com.sany.bbossframework.velocity.runtime.visitor;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.    
+ */
+
+import java.io.Writer;
+
+import bboss.org.apache.velocity.context.InternalContextAdapter;
+import bboss.org.apache.velocity.runtime.parser.node.ASTAddNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTAndNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTAssignment;
+import bboss.org.apache.velocity.runtime.parser.node.ASTBlock;
+import bboss.org.apache.velocity.runtime.parser.node.ASTComment;
+import bboss.org.apache.velocity.runtime.parser.node.ASTDirective;
+import bboss.org.apache.velocity.runtime.parser.node.ASTDivNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTEQNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTElseIfStatement;
+import bboss.org.apache.velocity.runtime.parser.node.ASTElseStatement;
+import bboss.org.apache.velocity.runtime.parser.node.ASTEscape;
+import bboss.org.apache.velocity.runtime.parser.node.ASTEscapedDirective;
+import bboss.org.apache.velocity.runtime.parser.node.ASTExpression;
+import bboss.org.apache.velocity.runtime.parser.node.ASTFalse;
+import bboss.org.apache.velocity.runtime.parser.node.ASTFloatingPointLiteral;
+import bboss.org.apache.velocity.runtime.parser.node.ASTGENode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTGTNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTIdentifier;
+import bboss.org.apache.velocity.runtime.parser.node.ASTIfStatement;
+import bboss.org.apache.velocity.runtime.parser.node.ASTIntegerLiteral;
+import bboss.org.apache.velocity.runtime.parser.node.ASTIntegerRange;
+import bboss.org.apache.velocity.runtime.parser.node.ASTLENode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTLTNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTMap;
+import bboss.org.apache.velocity.runtime.parser.node.ASTMethod;
+import bboss.org.apache.velocity.runtime.parser.node.ASTModNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTMulNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTNENode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTNotNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTObjectArray;
+import bboss.org.apache.velocity.runtime.parser.node.ASTOrNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTReference;
+import bboss.org.apache.velocity.runtime.parser.node.ASTSetDirective;
+import bboss.org.apache.velocity.runtime.parser.node.ASTStringLiteral;
+import bboss.org.apache.velocity.runtime.parser.node.ASTSubtractNode;
+import bboss.org.apache.velocity.runtime.parser.node.ASTText;
+import bboss.org.apache.velocity.runtime.parser.node.ASTTrue;
+import bboss.org.apache.velocity.runtime.parser.node.ASTWord;
+import bboss.org.apache.velocity.runtime.parser.node.ASTprocess;
+import bboss.org.apache.velocity.runtime.parser.node.ParserVisitor;
+import bboss.org.apache.velocity.runtime.parser.node.SimpleNode;
+
+/**
+ * This is the base class for all visitors.
+ * For each AST node, this class will provide
+ * a bare-bones method for traversal.
+ *
+ * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+ * @version $Id: BaseVisitor.java 747106 2009-02-23 19:25:14Z nbubna $
+ */
+public abstract class BaseVisitor implements ParserVisitor
+{
+    /** Context used during traversal */
+    protected InternalContextAdapter context;
+
+    /** Writer used as the output sink */
+    protected Writer writer;
+
+    /**
+     * @param writer
+     */
+    public void setWriter( Writer writer )
+    {
+        this.writer = writer;
+    }
+
+    /**
+     * @param context
+     */
+    public void setContext( InternalContextAdapter context)
+    {
+        this.context = context;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.SimpleNode, Object)
+     */
+    public Object visit(SimpleNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTprocess, Object)
+     */
+    public Object visit(ASTprocess node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTExpression, Object)
+     */
+    public Object visit(ASTExpression node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTAssignment, Object)
+     */
+    public Object visit(ASTAssignment node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTOrNode, Object)
+     */
+    public Object visit(ASTOrNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTAndNode, Object)
+     */
+    public Object visit(ASTAndNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTEQNode, Object)
+     */
+    public Object visit(ASTEQNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTNENode, Object)
+     */
+    public Object visit(ASTNENode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTLTNode, Object)
+     */
+    public Object visit(ASTLTNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTGTNode, Object)
+     */
+    public Object visit(ASTGTNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTLENode, Object)
+     */
+    public Object visit(ASTLENode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTGENode, Object)
+     */
+    public Object visit(ASTGENode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTAddNode, Object)
+     */
+    public Object visit(ASTAddNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTSubtractNode, Object)
+     */
+    public Object visit(ASTSubtractNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTMulNode, Object)
+     */
+    public Object visit(ASTMulNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTDivNode, Object)
+     */
+    public Object visit(ASTDivNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTModNode, Object)
+     */
+    public Object visit(ASTModNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTNotNode, Object)
+     */
+    public Object visit(ASTNotNode node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTIntegerLiteral, Object)
+     */
+    public Object visit(ASTIntegerLiteral node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTFloatingPointLiteral, Object)
+     * @since 1.5
+     */
+    public Object visit(ASTFloatingPointLiteral node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTStringLiteral, Object)
+     */
+    public Object visit(ASTStringLiteral node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTIdentifier, Object)
+     */
+    public Object visit(ASTIdentifier node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTMethod, Object)
+     */
+    public Object visit(ASTMethod node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTReference, Object)
+     */
+    public Object visit(ASTReference node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTTrue, Object)
+     */
+    public Object visit(ASTTrue node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTFalse, Object)
+     */
+    public Object visit(ASTFalse node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTBlock, Object)
+     */
+    public Object visit(ASTBlock node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTText, Object)
+     */
+    public Object visit(ASTText node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTIfStatement, Object)
+     */
+    public Object visit(ASTIfStatement node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTElseStatement, Object)
+     */
+    public Object visit(ASTElseStatement node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTElseIfStatement, Object)
+     */
+    public Object visit(ASTElseIfStatement node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTComment, Object)
+     */
+    public Object visit(ASTComment node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTObjectArray, Object)
+     */
+    public Object visit(ASTObjectArray node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTWord, Object)
+     */
+    public Object visit(ASTWord node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTSetDirective, Object)
+     */
+    public Object visit(ASTSetDirective node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTDirective, Object)
+     */
+    public Object visit(ASTDirective node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTEscapedDirective, Object)
+     * @since 1.5
+     */
+    public Object visit(ASTEscapedDirective node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTEscape, Object)
+     * @since 1.5
+     */
+    public Object visit(ASTEscape node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTMap, Object)
+     * @since 1.5
+     */
+    public Object visit(ASTMap node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+
+    /**
+     * @see bboss.org.apache.velocity.runtime.parser.node.ParserVisitor#visit(bboss.org.apache.velocity.runtime.parser.node.ASTIntegerRange, Object)
+     * @since 1.5
+     */
+    public Object visit(ASTIntegerRange node, Object data)
+    {
+        data = node.childrenAccept(this, data);
+        return data;
+    }
+}
