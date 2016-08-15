@@ -37,9 +37,9 @@ dependencies {
             [group: 'javaee', name: 'javaee-api', version: '5', transitive: false],
     )
     compileOnly(
-            fileTree(dir: 'lib', include: '**/*.jar'),
             [group: 'xjavadoc', name: 'xjavadoc', version: '1.1', transitive: false],
-            [group: 'ant', name: 'ant', version: '1.6.4', transitive: false]
+            [group: 'ant', name: 'ant', version: '1.6.4', transitive: false],
+            [group: 'com.oracle', name: 'ojdbc14', version: '10.2.0.1.0', transitive: false]
     )
     testCompile(
             [group: 'org.apache.derby', name: 'derby', version: '10.9.1.0', transitive: false],

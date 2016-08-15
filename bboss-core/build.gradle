@@ -3,11 +3,9 @@ sourceSets {
         java {
             srcDir 'src'
             srcDir 'src-log'
-
         }
         resources {
             srcDir 'src' include 'aop.properties'
-
         }
         compileClasspath = configurations.compile
     }
@@ -19,11 +17,9 @@ sourceSets {
             srcDir 'resources'
         }
     }
-
 }
 project.tasks.compileJava.dependsOn(project(':bboss-util').tasks.install)
 dependencies {
-
     compile(
             [group: 'com.sany.bbossframework', name: 'bboss-util', version: "${version}", transitive: false],
             [group: 'com.sany.bbossframework', name: 'bboss-soa', version: "${version}", transitive: false],

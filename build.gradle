@@ -66,25 +66,6 @@ configure(subprojects) { subproject ->
         archives sourcesJar, javaDocJar
     }
 
-    /**
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                pom.project {
-                    name project.name
-                    version version
-                    packaging 'jar'
-                }
-                repository(url: 'http://bdp.sany.com.cn/nexus/content/repositories/releases/') {
-                    authentication(userName: 'sany', password: 'sany');
-                }
-                snapshotRepository(url: 'http://bdp.sany.com.cn/nexus/content/repositories/snapshots/') {
-                    authentication(userName: 'sany', password: 'sany');
-                }
-            }
-        }
-    }
-    */
     publishing {
         publications {
             mavenJava(MavenPublication) {
