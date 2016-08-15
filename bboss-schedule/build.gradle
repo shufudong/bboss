@@ -1,29 +1,29 @@
 sourceSets {
-	main {
-		java {
-			srcDir 'src-schedule'
-		}
-		resources {
-			
-		}
-	}
-	test {
+    main {
+        java {
+            srcDir 'src-schedule'
+        }
+        resources {
+
+        }
+    }
+    test {
         java {
             srcDir 'test'
         }
-        resources{
-        	srcDir 'resources'
+        resources {
+            srcDir 'resources'
         }
     }
 }
 project.tasks.compileJava.dependsOn(project(':bboss-persistent').tasks.install)
 dependencies {
-	compile (
-		[group: 'com.bbossgroups', name: 'bboss-core', version: "${version}", transitive: false],
-		[group: 'bsh', name: 'bsh', version: '2.0b1', transitive: false],
-		[group: 'com.bbossgroups', name: 'bboss-persistent', version: "${version}", transitive: false],
-		[group: 'com.bbossgroups', name: 'bboss-util', version: "${version}", transitive: false],
-		[group: 'log4j', name: 'log4j', version: '1.2.16', transitive: false],
-		[group: 'org.quartz-scheduler', name: 'quartz', version: '1.8.6', transitive: false]
-	)
+    compile(
+            [group: 'com.sany.bbossframework', name: 'bboss-core', version: "${version}", transitive: false],
+            [group: 'com.sany.bbossframework', name: 'bboss-persistent', version: "${version}", transitive: false],
+            [group: 'com.sany.bbossframework', name: 'bboss-util', version: "${version}", transitive: false],
+            [group: 'bsh', name: 'bsh', version: '2.0b1', transitive: false],
+            [group: 'log4j', name: 'log4j', version: '1.2.16', transitive: false],
+            [group: 'org.quartz-scheduler', name: 'quartz', version: '1.8.6', transitive: false]
+    )
 }

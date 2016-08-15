@@ -12,15 +12,14 @@ sourceSets {
 }
 project.tasks.compileJava.dependsOn(project(':bboss-core').tasks.install)
 dependencies {
-    compile (
+    compile(
             [group: 'log4j', name: 'log4j', version: '1.2.16', transitive: false],
-            [group: 'com.bbossgroups', name: 'bboss-util', version: "${version}", transitive: false],
-            [group: 'com.bbossgroups', name: 'bboss-core', version: "${version}", transitive: false],
+            [group: 'com.sany.bbossframework', name: 'bboss-util', version: "${version}", transitive: false],
+            [group: 'com.sany.bbossframework', name: 'bboss-core', version: "${version}", transitive: false],
             [group: 'com.caucho', name: 'hessian', version: '4.0.7', transitive: false],
-            [group: 'javaee', name: 'javaee-api', version: '5', transitive: false]
     )
-    /**
-     compileOnly (            
-            [group: 'javaee', name: 'javaee-api', version: '5', transitive: false]
-    )*/
+    compileOnly(
+            [group: 'javax.servlet', name: 'servlet-api', version:'2.5'],
+            [group: 'javax.servlet.jsp', name: 'jsp-api', version:'2.1']
+    )
 }
